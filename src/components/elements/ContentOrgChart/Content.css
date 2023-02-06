@@ -1,0 +1,23 @@
+.chartNode {
+    border: 1px solid black;
+    border-left: 5px solid #25A6F0;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.chartNode_name {
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    font-size: 16px;
+}
+
+.chartNode_values {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+}
