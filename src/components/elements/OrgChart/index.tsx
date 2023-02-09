@@ -3,26 +3,53 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { DataChart } from "../../../types/Chart.type";
 import ReactDOMServer from "react-dom/server";
 import ContentOrgChart from "../ContentOrgChart";
-import { Button, Modal } from "antd";
-import ModalOrgChart from "../ModalOrgChart";
 import { useDataOrgChart } from "../../../stores/orgChart.store";
-import { usePopper } from "react-popper";
+import 'react-tooltip/dist/react-tooltip.css'
+import { Tooltip } from "react-tooltip";
+import { Button } from "antd";
+import { throttle } from "lodash";
 
 type Props = {
   setClick: (callback: unknown) => void;
   onNodeClick: (d: string) => void;
 };
 
+type PropsContent = {
+  id: string
+};
+
+const Content = ({ id }: PropsContent) => {
+  const [name, setName] = useState('BINH')
+  const onChangeName = () => {
+    setName('HAI')
+  }
+  return (
+      <>
+        <div>Hello {name} {id}</div>
+        <Button onClick={onChangeName}>Change name</Button>
+      </>
+  )
+}
+
 export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
   const data = useDataOrgChart((state) => state.data);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpenPopover, setIsOpenPopover] = useState(false);
   const [idNode, setIdNode] = useState("");
   const [currentNode] = data.filter((item) => item.id === idNode);
-  console.log("currentNode", currentNode);
+  const [savedPosition, setSavedPosition] = useState({
+    x: 0,
+    y: 0
+  })
+  const [usedPosition, setUsedPosition] = useState({
+    x: 0,
+    y: 0
+  })
+  const [isActivePosition, setIsActivePosition] = useState(false)
+
   const d3Container = useRef(null);
   let chart: OrgChart<DataChart>;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!(data && d3Container.current)) return;
     if (!chart) {
       chart = new OrgChart();
@@ -34,8 +61,8 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
       .nodeHeight((d) => 120)
       .onNodeClick((d) => {
         onNodeClick(`${d}`);
+        setIsActivePosition(true)
         setIdNode(`${d}`);
-        // setIsModalOpen(true);
       })
       .childrenMargin((d) => 40)
       .compactMarginBetween((d) => 15)
@@ -55,33 +82,77 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
         );
       })
       .render();
+    const svgElement = document.querySelector('.svg-chart-container');
+    if (svgElement) {
+      // close popover if chart change SVG
+      const config = { attributes: true, childList: true, subtree: true };
+      const callback = (mutationList: any) => {
+        for (let i = 0; i < mutationList.length; i++) {
+          if (mutationList[i].type === 'childList') {
+            setIsOpenPopover(false);
+            setIdNode("")
+            break;
+          } else if (mutationList[i].type === 'attributes') {
+            setIsOpenPopover(false);
+            setIdNode("")
+            break;
+          }
+        }
+      };
+      const observer = new MutationObserver(callback);
+      observer.observe(svgElement, config);
+      return () => observer.disconnect();
+    }
   }, [data, d3Container.current]);
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  useEffect(() => {
+    if (!!idNode) {
+      setIsOpenPopover(true)
+    }
+  }, [idNode])
+
+  useEffect(() => {
+    if (isActivePosition) {
+      setUsedPosition(savedPosition)
+    }
+  }, [isActivePosition, savedPosition])
 
   const addNode = (node: DataChart) => {
     chart.addNode(node);
   };
 
-  const addNewNode = () => {};
+  const onMouseMoveChart = (e:any) => {
+    setSavedPosition({
+      x: e.clientX,
+      y: e.clientY
+    })
+    setIsActivePosition(false)
+  };
+
+  const onClickChart = (e: any) => {
+    if (e.target.matches(".node-button-foreign-object") && isOpenPopover) {
+      setIsOpenPopover(false)
+    }
+  }
 
   setClick(addNode);
 
   return (
-    <div>
-      <div ref={d3Container} />
-      <Modal
-        title={currentNode?.name}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Button onClick={addNewNode}>Thêm node cho node này</Button>
-        <Button>Sửa</Button>
-        <Button>Xóa</Button>
-      </Modal>
-    </div>
+    <>
+      <div id="my-element">
+        <div
+          ref={d3Container}
+          onMouseMove={throttle(onMouseMoveChart, 200)}
+          onClick={onClickChart}
+        />
+      </div>
+      <Tooltip
+        anchorId="my-element"
+        position={usedPosition}
+        isOpen={isOpenPopover}
+        children={<Content id={idNode}></Content>}
+        clickable
+      />
+    </>
   );
 };
