@@ -1,5 +1,5 @@
 import { OrgChart } from "d3-org-chart";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { DataChart } from "../../../types/Chart.type";
 import ReactDOMServer from "react-dom/server";
 import ContentOrgChart from "../ContentOrgChart";
@@ -35,16 +35,15 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
   const data = useDataOrgChart((state) => state.data);
   const [isOpenPopover, setIsOpenPopover] = useState(false);
   const [idNode, setIdNode] = useState("");
-  const [currentNode] = data.filter((item) => item.id === idNode);
   const [savedPosition, setSavedPosition] = useState({
     x: 0,
-    y: 0
+    y: 0,
+    active: false
   })
   const [usedPosition, setUsedPosition] = useState({
     x: 0,
     y: 0
   })
-  const [isActivePosition, setIsActivePosition] = useState(false)
 
   const d3Container = useRef(null);
   let chart: OrgChart<DataChart>;
@@ -61,8 +60,8 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
       .nodeHeight((d) => 120)
       .onNodeClick((d) => {
         onNodeClick(`${d}`);
-        setIsActivePosition(true)
         setIdNode(`${d}`);
+        setSavedPosition((prevState) => ({ ...prevState, active: true }))
       })
       .childrenMargin((d) => 40)
       .compactMarginBetween((d) => 15)
@@ -82,6 +81,7 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
         );
       })
       .render();
+
     const svgElement = document.querySelector('.svg-chart-container');
     if (svgElement) {
       // close popover if chart change SVG
@@ -112,38 +112,32 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
   }, [idNode])
 
   useEffect(() => {
-    if (isActivePosition) {
-      setUsedPosition(savedPosition)
+    if (savedPosition.active) {
+      setUsedPosition({
+        x: savedPosition.x,
+        y: savedPosition.y
+      })
     }
-  }, [isActivePosition, savedPosition])
+  }, [savedPosition])
 
   const addNode = (node: DataChart) => {
     chart.addNode(node);
   };
 
-  const onMouseMoveChart = (e:any) => {
+  const onMouseMoveChart = useCallback(throttle((e:any) => {
     setSavedPosition({
       x: e.clientX,
-      y: e.clientY
+      y: e.clientY,
+      active: false
     })
-    setIsActivePosition(false)
-  };
-
-  const onClickChart = (e: any) => {
-    if (e.target.matches(".node-button-foreign-object") && isOpenPopover) {
-      setIsOpenPopover(false)
-    }
-  }
-
-  setClick(addNode);
+  }, 100), []);
 
   return (
     <>
       <div id="my-element">
         <div
           ref={d3Container}
-          onMouseMove={throttle(onMouseMoveChart, 200)}
-          onClick={onClickChart}
+          onMouseMove={onMouseMoveChart}
         />
       </div>
       <Tooltip
