@@ -1,5 +1,5 @@
 import { OrgChart } from "d3-org-chart";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { DataChart } from "../../../types/Chart.type";
 import ReactDOMServer from "react-dom/server";
 import ContentOrgChart from "../ContentOrgChart";
@@ -13,6 +13,10 @@ type Props = {
   setClick: (callback: unknown) => void;
   onNodeClick: (d: string) => void;
 };
+
+type MutationList = {
+  type: string
+}
 
 type PropsContent = {
   id: string
@@ -86,7 +90,7 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
     if (svgElement) {
       // close popover if chart change SVG
       const config = { attributes: true, childList: true, subtree: true };
-      const callback = (mutationList: any) => {
+      const callback = (mutationList: MutationList[]) => {
         for (let i = 0; i < mutationList.length; i++) {
           if (mutationList[i].type === 'childList') {
             setIsOpenPopover(false);
@@ -124,7 +128,7 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
     chart.addNode(node);
   };
 
-  const onMouseMoveChart = useCallback(throttle((e:any) => {
+  const onMouseMoveChart = useCallback(throttle((e: React.MouseEvent<EventTarget>) => {
     setSavedPosition({
       x: e.clientX,
       y: e.clientY,
