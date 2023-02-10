@@ -20,8 +20,8 @@ const App = () => {
 
   return (
     <div className="container">
-      {/*{data[0]?.id ? "Add more node: " : "Create root node: "}*/}
-      {/*<ModalOrgChart parentId={data[0]?.id || ""} />*/}
+      {data[0]?.id ? "Add more node: " : "Create root node: "}
+      <ModalOrgChart parentId={data[0]?.id || ""} />
       <OrgChartComponent
         setClick={(click: any) => (addNodeChildFunc = click)}
         onNodeClick={onNodeClick}
