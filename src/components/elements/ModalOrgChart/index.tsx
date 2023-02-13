@@ -5,8 +5,14 @@ import { addData } from "../../../services/Chart.service";
 import { useDataOrgChart } from "../../../stores/orgChart.store";
 import { DataChart } from "../../../types/Chart.type";
 
-const ModalOrgChart = ({ parentId }: { parentId: string }) => {
-  console.log("parentId", parentId);
+const ModalOrgChart = ({
+  parentId,
+  type,
+}: {
+  parentId: string;
+  type: string;
+}) => {
+  console.log("type", type);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const { mutate } = useAddData();
   const addData = useDataOrgChart((state) => state.addData);
@@ -28,10 +34,10 @@ const ModalOrgChart = ({ parentId }: { parentId: string }) => {
   return (
     <>
       <Button type="primary" onClick={showModal}>
-        Create Node
+        {type === "create" ? "Tạo node mới" : "Chỉnh sửa"}
       </Button>
       <Modal
-        title="Basic Modal"
+        title={type === "create" ? "Tạo node mới" : "Chỉnh sửa"}
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
