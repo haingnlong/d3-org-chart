@@ -1,7 +1,6 @@
 import "./App.css";
-import ModalOrgChart from "./components/elements/ModalOrgChart";
-import { OrgChartComponent } from "./components/elements/OrgChart";
-import { useGetData } from "./queries/Chart.query";
+import ModalOrgChart from "./pages/OrgChart/OrgChartModal";
+import { OrgChartComponent } from "./pages/OrgChart/OrgChart";
 import { useDataOrgChart } from "./stores/orgChart.store";
 import { DataChart } from "./types/Chart.type";
 
@@ -19,7 +18,7 @@ const App = () => {
   };
 
   return (
-    <div className="container">
+    <div className="orgChart">
       {data[0]?.id ? "Add more node: " : "Create root node: "}
       <ModalOrgChart parentId={data[0]?.id || ""} />
       <OrgChartComponent

@@ -1,12 +1,12 @@
 import { OrgChart } from "d3-org-chart";
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { DataChart } from "../../../types/Chart.type";
+import { DataChart } from "../../types/Chart.type";
 import ReactDOMServer from "react-dom/server";
-import ContentOrgChart from "../ContentOrgChart";
-import { useDataOrgChart } from "../../../stores/orgChart.store";
+import ContentOrgChart from "./OrgChartNodeContent";
+import OrgChartNodeDetail from "./OrgChartNodeDetail";
+import { useDataOrgChart } from "../../stores/orgChart.store";
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from "react-tooltip";
-import { Button } from "antd";
 import { throttle } from "lodash";
 
 type Props = {
@@ -16,23 +16,6 @@ type Props = {
 
 type MutationList = {
   type: string
-}
-
-type PropsContent = {
-  id: string
-};
-
-const Content = ({ id }: PropsContent) => {
-  const [name, setName] = useState('BINH')
-  const onChangeName = () => {
-    setName('HAI')
-  }
-  return (
-      <>
-        <div>Hello {name} {id}</div>
-        <Button onClick={onChangeName}>Change name</Button>
-      </>
-  )
 }
 
 export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
@@ -159,7 +142,7 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
         anchorId="react-tooltip-chart"
         position={usedPosition}
         isOpen={isOpenPopover}
-        children={<Content id={idNode.currentId}></Content>}
+        children={<OrgChartNodeDetail id={idNode.currentId}></OrgChartNodeDetail>}
         clickable
       />
     </>

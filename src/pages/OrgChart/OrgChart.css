@@ -21,3 +21,28 @@
     align-items: center;
     margin-bottom: 10px;
 }
+
+.orgChart .react-tooltip {
+    padding: 0;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #d9d9d9;
+    opacity: 1;
+    width: 360px;
+}
+
+.orgChart .react-tooltip-arrow {
+    display: none;
+}
+
+.orgChart .panel {
+    text-align: start;
+}
+
+.orgChart .ant-collapse-header {
+    background-color: #d9d9d9;
+}
+
+.orgChart .ant-collapse-content-box {
+    padding: 12px !important;
+}

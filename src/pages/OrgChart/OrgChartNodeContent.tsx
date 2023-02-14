@@ -1,5 +1,5 @@
-import { DataChart } from "../../../types/Chart.type";
-import "./Content.css";
+import { DataChart } from "../../types/Chart.type";
+import "./OrgChart.css";
 
 type ContentOrgChartProps = { data: DataChart };
 const ContentOrgChart = ({ data }: ContentOrgChartProps) => {

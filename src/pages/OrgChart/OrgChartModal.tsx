@@ -1,9 +1,9 @@
 import { Button, Form, Input, InputNumber, Modal } from "antd";
 import { useState } from "react";
-import { useAddData } from "../../../queries/Chart.query";
-import { addData } from "../../../services/Chart.service";
-import { useDataOrgChart } from "../../../stores/orgChart.store";
-import { DataChart } from "../../../types/Chart.type";
+import { useAddData } from "../../queries/Chart.query";
+import { addData } from "../../services/Chart.service";
+import { useDataOrgChart } from "../../stores/orgChart.store";
+import { DataChart } from "../../types/Chart.type";
 
 const ModalOrgChart = ({ parentId }: { parentId: string }) => {
   console.log("parentId", parentId);
