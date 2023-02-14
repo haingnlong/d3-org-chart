@@ -1,12 +1,14 @@
 import React from "react";
 import { Collapse, Divider } from 'antd';
+import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
 const { Panel } = Collapse;
 
 type PropsContent = {
-    id: string
+    id: string,
+    onClosePopover: () => void
 };
 
-const OrgChartNodeDetail = ({ id }: PropsContent) => {
+const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
     return (
         <div className="flex flex-col">
             <div className="flex justify-between p-4">
@@ -15,7 +17,10 @@ const OrgChartNodeDetail = ({ id }: PropsContent) => {
                     <div>KHỐI HỖ TRỢ (HT)</div>
                     <div>kể từ Hôm nay</div>
                 </div>
-                <div>hello</div>
+                <div className="flex">
+                    <MenuOutlined className="cursor-pointer"/>
+                    <CloseOutlined  className="ml-2 cursor-pointer" onClick={onClosePopover}/>
+                </div>
             </div>
 
             <Collapse bordered={false} size="small" defaultActiveKey={['1', '2', '3']}>

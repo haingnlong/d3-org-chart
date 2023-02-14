@@ -20,7 +20,7 @@ const App = () => {
   return (
     <div className="orgChart">
       {data[0]?.id ? "Add more node: " : "Create root node: "}
-      <ModalOrgChart parentId={data[0]?.id || ""} />
+      <ModalOrgChart parentId={data[0]?.id || ""} type="create" />
       <OrgChartComponent
         setClick={(click: any) => (addNodeChildFunc = click)}
         onNodeClick={onNodeClick}

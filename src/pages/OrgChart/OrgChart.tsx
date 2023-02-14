@@ -118,10 +118,6 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
     }
   }, [savedPosition])
 
-  const addNode = (node: DataChart) => {
-    chart.addNode(node);
-  };
-
   const onMouseMoveChart = useCallback(throttle((e: React.MouseEvent<EventTarget>) => {
     setSavedPosition({
       x: e.clientX,
@@ -142,7 +138,7 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
         anchorId="react-tooltip-chart"
         position={usedPosition}
         isOpen={isOpenPopover}
-        children={<OrgChartNodeDetail id={idNode.currentId}></OrgChartNodeDetail>}
+        children={<OrgChartNodeDetail id={idNode.currentId} onClosePopover={() => setIsOpenPopover(false)}></OrgChartNodeDetail>}
         clickable
       />
     </>
