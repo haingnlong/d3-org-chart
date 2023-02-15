@@ -5,12 +5,14 @@ import { addData } from "../../services/Chart.service";
 import { useDataOrgChart } from "../../stores/orgChart.store";
 import { DataChart } from "../../types/Chart.type";
 
-const ModalOrgChart = ({
+const OrgChartModal = ({
   parentId,
   type,
+  symbol,
 }: {
   parentId: string;
   type: string;
+  symbol: React.ReactElement<any | any> | string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const { mutate } = useAddData();
@@ -37,9 +39,14 @@ const ModalOrgChart = ({
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        "Tạo node mới"
+      <Button
+        type="primary"
+        onClick={showModal}
+        icon={typeof symbol !== "string" ? symbol : null}
+      >
+        {typeof symbol == "string" ? symbol : null}
       </Button>
+
       <Modal
         title={type === "create" ? "Tạo node mới" : "Chỉnh sửa"}
         open={isModalOpen}
@@ -81,4 +88,4 @@ const ModalOrgChart = ({
   );
 };
 
-export default ModalOrgChart;
+export default OrgChartModal;

@@ -15,7 +15,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { throttle } from "lodash";
 
-const chart: OrgChart<DataChart> = new OrgChart();
+let chart: OrgChart<DataChart> = new OrgChart();
 
 type Props = {
   // setClick: (callback: unknown) => void;
@@ -45,7 +45,7 @@ export const OrgChartComponent = ({ onNodeClick }: Props) => {
 
   const d3Container = useRef(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!(data && d3Container.current)) return;
     chart
       .container(d3Container.current)

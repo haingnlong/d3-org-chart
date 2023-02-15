@@ -1,8 +1,8 @@
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, MenuOutlined, ToolOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
+import OrgChartModal from "../../../pages/OrgChart/OrgChartModal";
 import { useDataOrgChart } from "../../../stores/orgChart.store";
-import ModalOrgChart from "../ModalOrgChart";
 import "./PopoverOrgChart.css";
 
 type PropsContent = {
@@ -25,8 +25,8 @@ const PopoverOrgChart = ({ id }: PropsContent) => {
   return (
     <div className="popover">
       <div>{dataNode.name}</div>
-      <ModalOrgChart parentId={id} type="create" />
-      <ModalOrgChart parentId={id} type="update" />
+      <OrgChartModal parentId={id} type="create" symbol={"add new"} />
+      <OrgChartModal parentId={id} type="update" symbol={<ToolOutlined />} />
       <Button
         type="primary"
         icon={<CloseOutlined />}
