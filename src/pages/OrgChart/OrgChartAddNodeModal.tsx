@@ -1,26 +1,26 @@
-import { Button, Form, Input, InputNumber, Modal, notification } from "antd";
+import { Button, Form, Input, InputNumber, Modal } from "antd";
 import { useDataOrgChart } from "../../stores/orgChart.store";
 import { DataChart } from "../../types/Chart.type";
 
-const OrgChartAddModal = () => {
-    const { data, addData, isOpenAddModal, setIsOpenAddModal } = useDataOrgChart((state) => state);
+type PropsContent = {
+    nodeDetail: DataChart | null
+};
+
+const OrgChartAddNodeModal = ({ nodeDetail }: PropsContent) => {
+    const { addData, isOpenAddNodeModal, setIsOpenAddNodeModal } = useDataOrgChart((state) => state);
 
     const onFinish = (values: DataChart) => {
-        if (data.length === 0) {
-            setIsOpenAddModal(false);
-            addData({ ...values });
-        } else {
-            notification.open({
-                message: 'Sơ đồ tổ chức đã tồn tại.',
-            });
+        if (nodeDetail?.id) {
+            setIsOpenAddNodeModal(false);
+            addData({ ...values, parentId: nodeDetail.id });
         }
     };
 
     return (
         <Modal
-            title={"Thêm node"}
-            open={isOpenAddModal}
-            onCancel={() => setIsOpenAddModal(false)}
+            title={"Thêm thực thể"}
+            open={isOpenAddNodeModal}
+            onCancel={() => setIsOpenAddNodeModal(false)}
             footer={null}
         >
             <Form
@@ -55,4 +55,4 @@ const OrgChartAddModal = () => {
     );
 };
 
-export default OrgChartAddModal;
+export default OrgChartAddNodeModal;

@@ -9,9 +9,12 @@ type DataState = {
   getDataNode: (id: string) => void;
   isOpenAddModal: boolean;
   setIsOpenAddModal: (isOpen: boolean) => void;
+  isOpenAddNodeModal: boolean;
+  setIsOpenAddNodeModal: (isOpen: boolean) => void;
   isOpenUpdateModal: boolean;
   setIsOpenUpdateModal: (isOpen: boolean) => void;
-  // removeData: (node: { test: string }) => void;
+  updateDataNode: (node: DataChart) => void;
+  removeData: (id: string) => void;
 };
 
 export const useDataOrgChart = create<DataState>((set) => ({
@@ -34,9 +37,29 @@ export const useDataOrgChart = create<DataState>((set) => ({
     setIsOpenAddModal: (isOpen) => set(() => {
         return { isOpenAddModal: isOpen }
     }),
+    isOpenAddNodeModal: false,
+    setIsOpenAddNodeModal: (isOpen) => set(() => {
+        return { isOpenAddNodeModal: isOpen }
+    }),
     isOpenUpdateModal: false,
     setIsOpenUpdateModal: (isOpen) => set(() => {
         return { isOpenUpdateModal: isOpen }
-    })
-  // removeData: (node) => set((state) => ({ data: state.data.filter(item => item.id !== node.id) })),
+    }),
+  updateDataNode: (node) =>
+    set((state) => {
+      const data = [...state.data];
+      data.forEach((e) => {
+        if (e.id === node.id) {
+          e.fte = node.fte;
+          e.ftePosition = node.ftePosition;
+          e.name = node.name;
+        }
+      });
+      return { data: data };
+    }),
+  removeData: (id) =>
+    set((state) => {
+      state.data = state.data.filter((dataNode) => dataNode.id !== id);
+      return { data: state.data };
+    }),
 }));

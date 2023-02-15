@@ -47,6 +47,34 @@ export const DefaultData: DataChart[] = [
     fte: 50,
     ftePosition: 500,
   },
+  {
+    id: "test1",
+    name: "Test1",
+    parentId: "ttnnlc",
+    fte: 30,
+    ftePosition: 300,
+  },
+  {
+    id: "test2",
+    name: "Test2",
+    parentId: "ttnnlc",
+    fte: 30,
+    ftePosition: 300,
+  },
+  {
+    id: "test3",
+    name: "Test3",
+    parentId: "marketing",
+    fte: 30,
+    ftePosition: 300,
+  },
+  {
+    id: "Test4",
+    name: "Test4",
+    parentId: "marketing",
+    fte: 30,
+    ftePosition: 300,
+  },
 ];
 
 export const addData = (params: any) => {

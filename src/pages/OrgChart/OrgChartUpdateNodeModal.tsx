@@ -3,24 +3,22 @@ import { useDataOrgChart } from "../../stores/orgChart.store";
 import { DataChart } from "../../types/Chart.type";
 
 type PropsContent = {
-  nodeDetail: DataChart | null,
-  addNode: (node: DataChart) => void
+  nodeDetail: DataChart | null
 };
 
-const OrgChartUpdateModal = ({ nodeDetail, addNode }: PropsContent) => {
-  const { addData, isOpenUpdateModal, setIsOpenUpdateModal } = useDataOrgChart((state) => state);
+const OrgChartUpdateNodeModal = ({ nodeDetail }: PropsContent) => {
+  const { updateDataNode, isOpenUpdateModal, setIsOpenUpdateModal } = useDataOrgChart((state) => state);
 
   const onFinish = (values: DataChart) => {
     if (nodeDetail?.id) {
       setIsOpenUpdateModal(false);
-      addNode({ ...values, parentId: nodeDetail.id })
-      addData({ ...values, parentId: nodeDetail.id });
+      updateDataNode(values);
     }
   };
 
   return (
       <Modal
-          title={"Thêm thực thể con"}
+          title={"Sửa node"}
           open={isOpenUpdateModal}
           onCancel={() => setIsOpenUpdateModal(false)}
           footer={null}
@@ -30,9 +28,10 @@ const OrgChartUpdateModal = ({ nodeDetail, addNode }: PropsContent) => {
             wrapperCol={{ span: 16 }}
             onFinish={onFinish}
             autoComplete="off"
+            initialValues={{...nodeDetail}}
         >
           <Form.Item label="Id" name="id">
-            <Input />
+            <Input disabled/>
           </Form.Item>
 
           <Form.Item label="Name" name="name">
@@ -57,4 +56,4 @@ const OrgChartUpdateModal = ({ nodeDetail, addNode }: PropsContent) => {
   );
 };
 
-export default OrgChartUpdateModal;
+export default OrgChartUpdateNodeModal;
