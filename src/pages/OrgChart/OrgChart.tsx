@@ -1,48 +1,52 @@
 import { OrgChart } from "d3-org-chart";
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { DataChart } from "../../types/Chart.type";
 import ReactDOMServer from "react-dom/server";
 import ContentOrgChart from "./OrgChartNodeContent";
 import OrgChartNodeDetail from "./OrgChartNodeDetail";
 import { useDataOrgChart } from "../../stores/orgChart.store";
-import 'react-tooltip/dist/react-tooltip.css'
+import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { throttle } from "lodash";
 
+const chart: OrgChart<DataChart> = new OrgChart();
+
 type Props = {
-  setClick: (callback: unknown) => void;
+  // setClick: (callback: unknown) => void;
   onNodeClick: (d: string) => void;
 };
 
 type MutationList = {
-  type: string
-}
+  type: string;
+};
 
-export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
+export const OrgChartComponent = ({ onNodeClick }: Props) => {
   const data = useDataOrgChart((state) => state.data);
   const [isOpenPopover, setIsOpenPopover] = useState(false);
   const [idNode, setIdNode] = useState({
     preId: "",
-    currentId: ""
+    currentId: "",
   });
   const [savedPosition, setSavedPosition] = useState({
     x: 0,
     y: 0,
-    active: false
-  })
+    active: false,
+  });
   const [usedPosition, setUsedPosition] = useState({
     x: 0,
-    y: 0
-  })
+    y: 0,
+  });
 
   const d3Container = useRef(null);
-  let chart: OrgChart<DataChart>;
 
   useLayoutEffect(() => {
     if (!(data && d3Container.current)) return;
-    if (!chart) {
-      chart = new OrgChart();
-    }
     chart
       .container(d3Container.current)
       .data(data)
@@ -50,8 +54,11 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
       .nodeHeight(() => 120)
       .onNodeClick((d) => {
         onNodeClick(`${d}`);
-        setIdNode((prevState) => ({ preId: prevState.currentId, currentId: `${d}` }));
-        setSavedPosition((prevState) => ({ ...prevState, active: true }))
+        setIdNode((prevState) => ({
+          preId: prevState.currentId,
+          currentId: `${d}`,
+        }));
+        setSavedPosition((prevState) => ({ ...prevState, active: true }));
       })
       .childrenMargin((d) => 40)
       .compactMarginBetween((d) => 15)
@@ -72,19 +79,19 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
       })
       .render();
 
-    const svgElement = document.querySelector('.svg-chart-container');
+    const svgElement = document.querySelector(".svg-chart-container");
     if (svgElement) {
       // close popover if chart change SVG
       const config = { attributes: true, childList: true, subtree: true };
       const callback = (mutationList: MutationList[]) => {
         for (let i = 0; i < mutationList.length; i++) {
-          if (mutationList[i].type === 'childList') {
+          if (mutationList[i].type === "childList") {
             setIsOpenPopover(false);
-            setIdNode({ preId: "", currentId: "" })
+            setIdNode({ preId: "", currentId: "" });
             break;
-          } else if (mutationList[i].type === 'attributes') {
+          } else if (mutationList[i].type === "attributes") {
             setIsOpenPopover(false);
-            setIdNode({ preId: "", currentId: "" })
+            setIdNode({ preId: "", currentId: "" });
             break;
           }
         }
@@ -97,48 +104,60 @@ export const OrgChartComponent = ({ onNodeClick, setClick }: Props) => {
 
   useEffect(() => {
     if (idNode.currentId !== "") {
-      setIsOpenPopover(true)
+      setIsOpenPopover(true);
     }
-    if (idNode.preId === idNode.currentId
-        && idNode.currentId !== ""
-        && idNode.preId !== ""
-        && isOpenPopover
+    if (
+      idNode.preId === idNode.currentId &&
+      idNode.currentId !== "" &&
+      idNode.preId !== "" &&
+      isOpenPopover
     ) {
       // close popover when click current node again
-      setIsOpenPopover(false)
+      setIsOpenPopover(false);
     }
-  }, [idNode])
+  }, [idNode]);
 
   useEffect(() => {
     if (savedPosition.active) {
       setUsedPosition({
         x: savedPosition.x,
-        y: savedPosition.y
-      })
+        y: savedPosition.y,
+      });
     }
-  }, [savedPosition])
+  }, [savedPosition]);
 
-  const onMouseMoveChart = useCallback(throttle((e: React.MouseEvent<EventTarget>) => {
-    setSavedPosition({
-      x: e.clientX,
-      y: e.clientY,
-      active: false
-    })
-  }, 100), []);
+  const addNode = (node: DataChart) => {
+    chart.addNode(node);
+  };
+
+  // setClick(addNode);
+
+  const onMouseMoveChart = useCallback(
+    throttle((e: React.MouseEvent<EventTarget>) => {
+      setSavedPosition({
+        x: e.clientX,
+        y: e.clientY,
+        active: false,
+      });
+    }, 100),
+    []
+  );
 
   return (
     <>
       <div id="react-tooltip-chart">
-        <div
-          ref={d3Container}
-          onMouseMove={onMouseMoveChart}
-        />
+        <div ref={d3Container} onMouseMove={onMouseMoveChart} />
       </div>
       <Tooltip
         anchorId="react-tooltip-chart"
         position={usedPosition}
         isOpen={isOpenPopover}
-        children={<OrgChartNodeDetail id={idNode.currentId} onClosePopover={() => setIsOpenPopover(false)}></OrgChartNodeDetail>}
+        children={
+          <OrgChartNodeDetail
+            id={idNode.currentId}
+            onClosePopover={() => setIsOpenPopover(false)}
+          ></OrgChartNodeDetail>
+        }
         clickable
       />
     </>

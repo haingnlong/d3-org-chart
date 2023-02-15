@@ -12,10 +12,10 @@ const ModalOrgChart = ({
   parentId: string;
   type: string;
 }) => {
-  console.log("type", type);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const { mutate } = useAddData();
   const addData = useDataOrgChart((state) => state.addData);
+  const updateDataNode = useDataOrgChart((state) => state.updateDataNode);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -27,7 +27,11 @@ const ModalOrgChart = ({
 
   const onFinish = (values: DataChart) => {
     setIsModalOpen(false);
-    addData({ ...values, parentId: parentId || "" });
+    if (type === "create") {
+      addData({ ...values, parentId: parentId || "" });
+    } else {
+      updateDataNode({ ...values, id: parentId });
+    }
     // mutate({ ...values, parentId: parentId || "" });
   };
 
@@ -48,9 +52,11 @@ const ModalOrgChart = ({
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Form.Item label="Id" name="id">
-            <Input />
-          </Form.Item>
+          {type === "create" && (
+            <Form.Item label="Id" name="id">
+              <Input />
+            </Form.Item>
+          )}
 
           <Form.Item label="Name" name="name">
             <Input />

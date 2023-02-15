@@ -7,7 +7,8 @@ type DataState = {
   addData: (node: DataChart) => void;
   dataNode: DataChart;
   getDataNode: (id: string) => void;
-  // removeData: (node: { test: string }) => void;
+  updateDataNode: (node: DataChart) => void;
+  removeData: (id: string) => void;
 };
 
 export const useDataOrgChart = create<DataState>((set) => ({
@@ -26,5 +27,21 @@ export const useDataOrgChart = create<DataState>((set) => ({
       const data = state.data;
       return { dataNode: data.find((dataNode) => dataNode.id === id) };
     }),
-  // removeData: (node) => set((state) => ({ data: state.data.filter(item => item.id !== node.id) })),
+  updateDataNode: (node) =>
+    set((state) => {
+      const data = [...state.data];
+      data.forEach((e) => {
+        if (e.id === node.id) {
+          e.fte = node.fte;
+          e.ftePosition = node.ftePosition;
+          e.name = node.name;
+        }
+      });
+      return { data: data };
+    }),
+  removeData: (id) =>
+    set((state) => {
+      state.data = state.data.filter((dataNode) => dataNode.id !== id);
+      return { data: state.data };
+    }),
 }));
