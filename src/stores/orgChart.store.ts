@@ -7,6 +7,10 @@ type DataState = {
   addData: (node: DataChart) => void;
   dataNode: DataChart;
   getDataNode: (id: string) => void;
+  isOpenAddModal: boolean;
+  setIsOpenAddModal: (isOpen: boolean) => void;
+  isOpenUpdateModal: boolean;
+  setIsOpenUpdateModal: (isOpen: boolean) => void;
   // removeData: (node: { test: string }) => void;
 };
 
@@ -26,5 +30,13 @@ export const useDataOrgChart = create<DataState>((set) => ({
       const data = state.data;
       return { dataNode: data.find((dataNode) => dataNode.id === id) };
     }),
+    isOpenAddModal: false,
+    setIsOpenAddModal: (isOpen) => set(() => {
+        return { isOpenAddModal: isOpen }
+    }),
+    isOpenUpdateModal: false,
+    setIsOpenUpdateModal: (isOpen) => set(() => {
+        return { isOpenUpdateModal: isOpen }
+    })
   // removeData: (node) => set((state) => ({ data: state.data.filter(item => item.id !== node.id) })),
 }));

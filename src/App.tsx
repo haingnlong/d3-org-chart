@@ -1,31 +1,16 @@
+import React, { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import ModalOrgChart from "./pages/OrgChart/OrgChartModal";
-import { OrgChartComponent } from "./pages/OrgChart/OrgChart";
-import { useDataOrgChart } from "./stores/orgChart.store";
-import { DataChart } from "./types/Chart.type";
+
+const OrgChartComponent = lazy(() => import("./pages/OrgChart/OrgChart"));
 
 const App = () => {
-  // const { data: dataChart } = useGetData();
-  const data = useDataOrgChart((state) => state.data);
-  let addNodeChildFunc = (callback: unknown) => {};
-
-  const addNode = (params: DataChart) => {
-    addNodeChildFunc(params);
-  };
-
-  const onNodeClick = (nodeId: any) => {
-    // alert("clicked " + nodeId);
-  };
-
   return (
-    <div className="orgChart">
-      {data[0]?.id ? "Add more node: " : "Create root node: "}
-      <ModalOrgChart parentId={data[0]?.id || ""} type="create" />
-      <OrgChartComponent
-        setClick={(click: any) => (addNodeChildFunc = click)}
-        onNodeClick={onNodeClick}
-      />
-    </div>
+      <Suspense fallback={<div>Loading . . .</div>}>
+          <Routes>
+              <Route path="/" element={<OrgChartComponent/>} />
+          </Routes>
+      </Suspense>
   );
 };
 

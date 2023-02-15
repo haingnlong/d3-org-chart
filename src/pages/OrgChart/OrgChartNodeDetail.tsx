@@ -1,25 +1,28 @@
 import React from "react";
 import { Collapse, Divider } from 'antd';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
+import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import { DataChart } from "../../types/Chart.type";
+import { useDataOrgChart } from "../../stores/orgChart.store";
 const { Panel } = Collapse;
 
 type PropsContent = {
-    id: string,
+    nodeDetail: DataChart | null,
     onClosePopover: () => void
 };
 
-const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
+const OrgChartNodeDetail = ({ nodeDetail, onClosePopover }: PropsContent) => {
+    const { setIsOpenUpdateModal } = useDataOrgChart((state) => state);
     return (
         <div className="flex flex-col">
             <div className="flex justify-between p-4">
                 <div className="flex flex-col items-start">
                     <div className="font-semibold">Đơn vị kinh doanh</div>
-                    <div>KHỐI HỖ TRỢ (HT)</div>
+                    <div>{nodeDetail?.name?.toUpperCase()}</div>
                     <div>kể từ Hôm nay</div>
                 </div>
                 <div className="flex">
-                    <MenuOutlined className="cursor-pointer"/>
-                    <CloseOutlined  className="ml-2 cursor-pointer" onClick={onClosePopover}/>
+                    <MenuOutlined className="cursor-pointer" onClick={() => setIsOpenUpdateModal(true)}/>
+                    <CloseOutlined  className="ml-2 cursor-pointer" onClick={() => onClosePopover()}/>
                 </div>
             </div>
 
