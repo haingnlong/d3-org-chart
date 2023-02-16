@@ -26,7 +26,7 @@ export default function OrgChartComponent() {
     preId: "",
     currentId: "",
   });
-  const [nodeDetail, setNodeDetail] = useState<DataChart | null>(null)
+
   const [savedPosition, setSavedPosition] = useState({
     x: 0,
     y: 0,

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Collapse, Divider } from "antd";
 import { CloseOutlined, EditOutlined, DeleteOutlined, MenuOutlined } from "@ant-design/icons";
 import { useDataOrgChart } from "../../stores/orgChart.store";
