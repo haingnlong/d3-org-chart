@@ -6,7 +6,7 @@ type DataState = {
   data: DataChart[];
   addData: (node: DataChart) => void;
   dataNode: DataChart;
-  getDataNode: (id: string) => void;
+  setDataNode: (id: string) => void;
   isOpenAddModal: boolean;
   setIsOpenAddModal: (isOpen: boolean) => void;
   isOpenAddNodeModal: boolean;
@@ -28,7 +28,7 @@ export const useDataOrgChart = create<DataState>((set) => ({
       return { data: [...data] };
     }),
   dataNode: {},
-  getDataNode: (id) =>
+  setDataNode: (id) =>
     set((state) => {
       const data = state.data;
       return { dataNode: data.find((dataNode) => dataNode.id === id) };

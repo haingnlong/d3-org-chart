@@ -20,7 +20,7 @@ type MutationList = {
 let chart: OrgChart<DataChart> = new OrgChart();
 
 export default function OrgChartComponent() {
-  const data = useDataOrgChart((state) => state.data);
+  const { data, setDataNode } = useDataOrgChart((state) => state);
   const [isOpenPopover, setIsOpenPopover] = useState(false);
   const [idNode, setIdNode] = useState({
     preId: "",
@@ -98,17 +98,7 @@ export default function OrgChartComponent() {
   useEffect(() => {
     if (idNode.currentId !== "") {
       setIsOpenPopover(true)
-      const nodeDetail = data.find((item) => item.id === idNode.currentId)
-      if(nodeDetail) setNodeDetail(nodeDetail)
-    }
-    if (
-      idNode.preId === idNode.currentId &&
-      idNode.currentId !== "" &&
-      idNode.preId !== "" &&
-      isOpenPopover
-    ) {
-      // close popover when click current node again
-      setIsOpenPopover(false);
+      setDataNode(idNode.currentId)
     }
   }, [idNode]);
 
@@ -134,9 +124,9 @@ export default function OrgChartComponent() {
 
   return (
     <div className="orgChart">
-      <OrgChartAddModal></OrgChartAddModal>
-      <OrgChartAddNodeModal nodeDetail={nodeDetail}></OrgChartAddNodeModal>
-      <OrgChartUpdateNodeModal nodeDetail={nodeDetail} />
+      <OrgChartAddModal/>
+      <OrgChartAddNodeModal/>
+      <OrgChartUpdateNodeModal />
       <OrgChartTool></OrgChartTool>
       <div id="react-tooltip-chart">
         <div ref={d3Container} onMouseMove={onMouseMoveChart} />

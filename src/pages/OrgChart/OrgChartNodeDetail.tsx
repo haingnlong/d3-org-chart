@@ -11,11 +11,7 @@ type PropsContent = {
 };
 
 const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
-  const { setIsOpenAddNodeModal, setIsOpenUpdateModal, dataNode, getDataNode, removeData } = useDataOrgChart((state) => state);
-
-  useEffect(() => {
-    getDataNode(id);
-  }, [id]);
+  const { setIsOpenAddNodeModal, setIsOpenUpdateModal, dataNode, removeData } = useDataOrgChart((state) => state);
 
   const removeNode = () => {
     removeData(id);
