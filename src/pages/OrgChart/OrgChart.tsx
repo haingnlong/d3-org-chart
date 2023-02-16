@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { OrgChart } from "d3-org-chart";
 import { DataChart } from "../../types/Chart.type";
 import ReactDOMServer from "react-dom/server";
@@ -7,46 +7,40 @@ import OrgChartNodeDetail from "./OrgChartNodeDetail";
 import { useDataOrgChart } from "../../stores/orgChart.store";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
-import { throttle, debounce } from "lodash";
+import { debounce } from "lodash";
 import OrgChartTool from "./OrgChartTool";
 import OrgChartAddModal from "./OrgChartAddModal";
 import OrgChartAddNodeModal from "./OrgChartAddNodeModal";
 import OrgChartUpdateNodeModal from "./OrgChartUpdateNodeModal";
+import * as d3 from "d3";
 
 let chart: OrgChart<DataChart> = new OrgChart();
 
 export default function OrgChartComponent() {
   const { data, setDataNode } = useDataOrgChart((state) => state);
   const [isOpenPopover, setIsOpenPopover] = useState(false);
-  const [idNode, setIdNode] = useState({
-    preId: "",
-    currentId: "",
-  });
-  const [savedPosition, setSavedPosition] = useState({
+  const [idNode, setIdNode] = useState("");
+  const [position, setPosition] = useState({
     x: 0,
-    y: 0,
-    active: false,
-  });
-  const [usedPosition, setUsedPosition] = useState({
-    x: 0,
-    y: 0,
+    y: 0
   });
 
   const d3Container = useRef(null);
 
   useLayoutEffect(() => {
     if (!(data && d3Container.current)) return;
+    const chartContainer = document.querySelector(".chart");
     chart
       .container(d3Container.current)
       .data(data)
       .nodeWidth(() => 200)
       .nodeHeight(() => 120)
       .onNodeClick((d) => {
-        setIdNode((prevState) => ({
-          preId: prevState.currentId,
-          currentId: `${d}`,
-        }));
-        setSavedPosition((prevState) => ({ ...prevState, active: true }));
+        setIdNode(`${d}`);
+        setPosition({
+          x: d3.pointer(event, chartContainer)[0] || 0,
+          y: d3.pointer(event, chartContainer)[1] || 0
+        })
       })
       .childrenMargin((d) => 40)
       .compactMarginBetween((d) => 15)
@@ -66,11 +60,9 @@ export default function OrgChartComponent() {
         );
       })
       .render();
-
-    const svgElement = document.querySelector(".chart");
-    if (svgElement) {
-      if (!svgElement.hasAttribute("transform")) {
-        svgElement.setAttribute("transform", "")
+    if (chartContainer) {
+      if (!chartContainer.hasAttribute("transform")) {
+        chartContainer.setAttribute("transform", "")
       }
       const debounceClosePopup = debounce(() => {
         setIsOpenPopover(false);
@@ -78,7 +70,7 @@ export default function OrgChartComponent() {
       const observer = new MutationObserver(function() {
         debounceClosePopup()
       });
-      observer.observe(svgElement, {
+      observer.observe(chartContainer, {
         attributes: true,
         attributeFilter: ['transform']
       });
@@ -87,31 +79,11 @@ export default function OrgChartComponent() {
   }, [data, d3Container.current]);
 
   useEffect(() => {
-    if (idNode.currentId !== "") {
+    if (idNode !== "") {
       setIsOpenPopover(true);
-      setDataNode(idNode.currentId);
+      setDataNode(idNode);
     }
   }, [idNode]);
-
-  useEffect(() => {
-    if (savedPosition.active) {
-      setUsedPosition({
-        x: savedPosition.x,
-        y: savedPosition.y,
-      });
-    }
-  }, [savedPosition]);
-
-  const onMouseMoveChart = useCallback(
-    throttle((e: React.MouseEvent<EventTarget>) => {
-      setSavedPosition({
-        x: e.clientX,
-        y: e.clientY,
-        active: false,
-      });
-    }, 100),
-    []
-  );
 
   return (
     <div className="orgChart">
@@ -120,15 +92,15 @@ export default function OrgChartComponent() {
       <OrgChartUpdateNodeModal />
       <OrgChartTool></OrgChartTool>
       <div id="react-tooltip-chart">
-        <div ref={d3Container} onMouseMove={onMouseMoveChart} />
+        <div ref={d3Container} />
       </div>
       <Tooltip
         anchorId="react-tooltip-chart"
-        position={usedPosition}
+        position={position}
         isOpen={isOpenPopover}
         children={
           <OrgChartNodeDetail
-            id={idNode.currentId}
+            id={idNode}
             onClosePopover={() => setIsOpenPopover(false)}
           ></OrgChartNodeDetail>
         }
