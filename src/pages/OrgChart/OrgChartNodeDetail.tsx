@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Collapse, Divider } from "antd";
 import { CloseOutlined, EditOutlined, DeleteOutlined, MenuOutlined } from "@ant-design/icons";
 import { useDataOrgChart } from "../../stores/orgChart.store";
@@ -11,11 +10,7 @@ type PropsContent = {
 };
 
 const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
-  const { setIsOpenAddNodeModal, setIsOpenUpdateModal, dataNode, getDataNode, removeData } = useDataOrgChart((state) => state);
-
-  useEffect(() => {
-    getDataNode(id);
-  }, [id]);
+  const { setIsOpenAddNodeModal, setIsOpenUpdateModal, dataNode, removeData } = useDataOrgChart((state) => state);
 
   const removeNode = () => {
     removeData(id);

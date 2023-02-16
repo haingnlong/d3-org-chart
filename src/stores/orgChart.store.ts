@@ -6,7 +6,7 @@ type DataState = {
   data: DataChart[];
   addData: (node: DataChart) => void;
   dataNode: DataChart;
-  getDataNode: (id: string) => void;
+  setDataNode: (id: string) => void;
   isOpenAddModal: boolean;
   setIsOpenAddModal: (isOpen: boolean) => void;
   isOpenAddNodeModal: boolean;
@@ -28,22 +28,25 @@ export const useDataOrgChart = create<DataState>((set) => ({
       return { data: [...data] };
     }),
   dataNode: {},
-  getDataNode: (id) =>
+  setDataNode: (id) =>
     set((state) => {
       const data = state.data;
       return { dataNode: data.find((dataNode) => dataNode.id === id) };
     }),
-    isOpenAddModal: false,
-    setIsOpenAddModal: (isOpen) => set(() => {
-        return { isOpenAddModal: isOpen }
+  isOpenAddModal: false,
+  setIsOpenAddModal: (isOpen) =>
+    set(() => {
+      return { isOpenAddModal: isOpen };
     }),
-    isOpenAddNodeModal: false,
-    setIsOpenAddNodeModal: (isOpen) => set(() => {
-        return { isOpenAddNodeModal: isOpen }
+  isOpenAddNodeModal: false,
+  setIsOpenAddNodeModal: (isOpen) =>
+    set(() => {
+      return { isOpenAddNodeModal: isOpen };
     }),
-    isOpenUpdateModal: false,
-    setIsOpenUpdateModal: (isOpen) => set(() => {
-        return { isOpenUpdateModal: isOpen }
+  isOpenUpdateModal: false,
+  setIsOpenUpdateModal: (isOpen) =>
+    set(() => {
+      return { isOpenUpdateModal: isOpen };
     }),
   updateDataNode: (node) =>
     set((state) => {
@@ -59,7 +62,18 @@ export const useDataOrgChart = create<DataState>((set) => ({
     }),
   removeData: (id) =>
     set((state) => {
-      state.data = state.data.filter((dataNode) => dataNode.id !== id);
-      return { data: state.data };
+      const indexOfId = state.data.findIndex((node) => node.id === id) + 1;
+      const deleteNode = state.data.find((node) => node.id === id);
+      const stackID = [deleteNode?.id];
+      for (let i = indexOfId; i < state.data.length; i++) {
+        if (
+          state.data[i].parentId === id ||
+          stackID.includes(state.data[i].parentId)
+        ) {
+          stackID.push(state.data[i].id);
+        }
+      }
+      const newData = state.data.filter((node) => !stackID.includes(node.id));
+      return { data: newData };
     }),
 }));

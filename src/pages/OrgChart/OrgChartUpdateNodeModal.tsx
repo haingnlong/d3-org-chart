@@ -2,15 +2,11 @@ import { Button, Form, Input, InputNumber, Modal } from "antd";
 import { useDataOrgChart } from "../../stores/orgChart.store";
 import { DataChart } from "../../types/Chart.type";
 
-type PropsContent = {
-  nodeDetail: DataChart | null
-};
-
-const OrgChartUpdateNodeModal = ({ nodeDetail }: PropsContent) => {
-  const { updateDataNode, isOpenUpdateModal, setIsOpenUpdateModal } = useDataOrgChart((state) => state);
+const OrgChartUpdateNodeModal = () => {
+  const { dataNode, updateDataNode, isOpenUpdateModal, setIsOpenUpdateModal } = useDataOrgChart((state) => state);
 
   const onFinish = (values: DataChart) => {
-    if (nodeDetail?.id) {
+    if (dataNode?.id) {
       setIsOpenUpdateModal(false);
       updateDataNode(values);
     }
@@ -28,7 +24,7 @@ const OrgChartUpdateNodeModal = ({ nodeDetail }: PropsContent) => {
             wrapperCol={{ span: 16 }}
             onFinish={onFinish}
             autoComplete="off"
-            initialValues={{...nodeDetail}}
+            initialValues={{...dataNode}}
         >
           <Form.Item label="Id" name="id">
             <Input disabled/>

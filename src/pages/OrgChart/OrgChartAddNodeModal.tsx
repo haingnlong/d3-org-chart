@@ -2,18 +2,14 @@ import { Button, Form, Input, InputNumber, Modal } from "antd";
 import { useDataOrgChart } from "../../stores/orgChart.store";
 import { DataChart } from "../../types/Chart.type";
 
-type PropsContent = {
-  nodeDetail: DataChart | null;
-};
-
-const OrgChartAddNodeModal = ({ nodeDetail }: PropsContent) => {
-  const { addData, isOpenAddNodeModal, setIsOpenAddNodeModal } =
+const OrgChartAddNodeModal = () => {
+  const { addData, isOpenAddNodeModal, setIsOpenAddNodeModal, dataNode } =
     useDataOrgChart((state) => state);
 
   const onFinish = (values: DataChart) => {
-    if (nodeDetail?.id) {
+    if (dataNode) {
       setIsOpenAddNodeModal(false);
-      addData({ ...values, parentId: nodeDetail.id });
+      addData({ ...values, parentId: dataNode.id });
     }
   };
 
