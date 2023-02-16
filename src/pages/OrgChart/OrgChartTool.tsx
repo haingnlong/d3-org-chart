@@ -16,7 +16,7 @@ for (let i = 10; i < 36; i++) {
 export default function OrgChartTool() {
     const { setIsOpenAddModal } = useDataOrgChart((state) => state);
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between mb-2">
             <div className="flex gap-4 basis-1/2">
                 <div className="flex items-center gap-1">
                     <div>Cấu trúc công ty</div>
