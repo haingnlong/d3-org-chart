@@ -7,10 +7,8 @@ const OrgChartAddNodeModal = () => {
     useDataOrgChart((state) => state);
 
   const onFinish = (values: DataChart) => {
-    if (dataNode) {
-      setIsOpenAddNodeModal(false);
-      addData({ ...values, parentId: dataNode.id });
-    }
+    setIsOpenAddNodeModal(false);
+    addData({ ...values, parentId: dataNode.id });
   };
 
   return (

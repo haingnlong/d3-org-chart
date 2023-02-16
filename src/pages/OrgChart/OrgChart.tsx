@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { OrgChart } from "d3-org-chart";
 import { DataChart } from "../../types/Chart.type";
 import ReactDOMServer from "react-dom/server";
@@ -13,15 +7,11 @@ import OrgChartNodeDetail from "./OrgChartNodeDetail";
 import { useDataOrgChart } from "../../stores/orgChart.store";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
-import { throttle } from "lodash";
+import { throttle, debounce } from "lodash";
 import OrgChartTool from "./OrgChartTool";
 import OrgChartAddModal from "./OrgChartAddModal";
 import OrgChartAddNodeModal from "./OrgChartAddNodeModal";
 import OrgChartUpdateNodeModal from "./OrgChartUpdateNodeModal";
-
-type MutationList = {
-  type: string;
-};
 
 let chart: OrgChart<DataChart> = new OrgChart();
 
@@ -77,25 +67,21 @@ export default function OrgChartComponent() {
       })
       .render();
 
-    const svgElement = document.querySelector(".svg-chart-container");
+    const svgElement = document.querySelector(".chart");
     if (svgElement) {
-      // close popover if chart change SVG
-      const config = { attributes: true, childList: true, subtree: true };
-      const callback = (mutationList: MutationList[]) => {
-        for (let i = 0; i < mutationList.length; i++) {
-          if (mutationList[i].type === "childList") {
-            setIsOpenPopover(false);
-            setIdNode({ preId: "", currentId: "" });
-            break;
-          } else if (mutationList[i].type === "attributes") {
-            setIsOpenPopover(false);
-            setIdNode({ preId: "", currentId: "" });
-            break;
-          }
-        }
-      };
-      const observer = new MutationObserver(callback);
-      observer.observe(svgElement, config);
+      if (!svgElement.hasAttribute("transform")) {
+        svgElement.setAttribute("transform", "")
+      }
+      const debounceClosePopup = debounce(() => {
+        setIsOpenPopover(false);
+      }, 100);
+      const observer = new MutationObserver(function() {
+        debounceClosePopup()
+      });
+      observer.observe(svgElement, {
+        attributes: true,
+        attributeFilter: ['transform']
+      });
       return () => observer.disconnect();
     }
   }, [data, d3Container.current]);

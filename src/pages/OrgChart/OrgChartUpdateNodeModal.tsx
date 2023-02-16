@@ -6,10 +6,8 @@ const OrgChartUpdateNodeModal = () => {
   const { dataNode, updateDataNode, isOpenUpdateModal, setIsOpenUpdateModal } = useDataOrgChart((state) => state);
 
   const onFinish = (values: DataChart) => {
-    if (dataNode?.id) {
-      setIsOpenUpdateModal(false);
-      updateDataNode(values);
-    }
+    setIsOpenUpdateModal(false);
+    updateDataNode(values);
   };
 
   return (
