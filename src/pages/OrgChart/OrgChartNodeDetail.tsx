@@ -15,7 +15,7 @@ const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
   const removeNode = () => {
     removeData(id);
   };
-
+  console.log('dataNode', dataNode)
   return (
     <div className="flex flex-col">
       <div className="flex justify-between p-4">

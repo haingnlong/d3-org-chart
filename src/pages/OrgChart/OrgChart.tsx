@@ -38,8 +38,8 @@ export default function OrgChartComponent() {
       .onNodeClick((d) => {
         setIdNode(`${d}`);
         setPosition({
-          x: d3.pointer(event, chartContainer)[0] || 0,
-          y: d3.pointer(event, chartContainer)[1] || 0
+          x: d3.pointer(event, chartContainer)[0] - d3.pointer(event)[0] + 100,
+          y: d3.pointer(event, chartContainer)[1] - d3.pointer(event)[1] + 60
         })
       })
       .childrenMargin((d) => 40)
@@ -85,6 +85,12 @@ export default function OrgChartComponent() {
     }
   }, [idNode]);
 
+    const onClosePopover = () => {
+     setIsOpenPopover(false);
+     setIdNode("");
+     setDataNode("")
+    }
+
   return (
     <div className="orgChart">
       <OrgChartAddModal />
@@ -101,7 +107,7 @@ export default function OrgChartComponent() {
         children={
           <OrgChartNodeDetail
             id={idNode}
-            onClosePopover={() => setIsOpenPopover(false)}
+            onClosePopover={onClosePopover}
           ></OrgChartNodeDetail>
         }
         clickable
