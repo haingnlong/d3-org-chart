@@ -66,7 +66,9 @@ export default function OrgChartComponent() {
           chartSVG.setAttribute("transform", "")
       }
       const debounceClosePopup = debounce(() => {
-        setIsOpenPopover(false);
+          setIsOpenPopover(false);
+          setIdNode("");
+          setDataNode("")
       }, 100);
       const observer = new MutationObserver(function() {
         debounceClosePopup()
@@ -98,7 +100,7 @@ export default function OrgChartComponent() {
       <OrgChartAddNodeModal />
       <OrgChartUpdateNodeModal />
       <OrgChartTool></OrgChartTool>
-      <div id="react-tooltip-chart" onMouseMove={(e) => console.log('e', e.clientX, e.clientY)}>
+      <div id="react-tooltip-chart">
         <div ref={d3Container} />
       </div>
       <Tooltip
