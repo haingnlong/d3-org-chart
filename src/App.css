@@ -7,13 +7,6 @@
   --scroll-bar-bg-color: #f6f6f6;
 }
 
-#root {
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);

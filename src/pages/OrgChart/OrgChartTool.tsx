@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Select, DatePicker } from 'antd';
 import type { SelectProps } from 'antd';
 import { StarOutlined, MinusOutlined, PlusOutlined, DiffOutlined, DownloadOutlined } from '@ant-design/icons';
@@ -14,7 +14,23 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function OrgChartTool() {
-    const { setIsOpenAddModal } = useDataOrgChart((state) => state);
+    const { chart, setIsOpenAddModal } = useDataOrgChart((state) => state);
+    const [zoomChartNumber, setZoomChartNumber] = useState(100)
+
+    const onClickZoomInChart = () => {
+        if (zoomChartNumber < 150) {
+            setZoomChartNumber(prevState => prevState + 10);
+            chart.zoomIn();
+        }
+    }
+
+    const onClickZoomOutChart = () => {
+        if (zoomChartNumber > 50) {
+            setZoomChartNumber(prevState => prevState - 10);
+            chart.zoomOut();
+        }
+    }
+
     return (
         <div className="flex justify-between mb-2">
             <div className="flex gap-4 basis-1/2">
@@ -42,22 +58,21 @@ export default function OrgChartTool() {
             </div>
             <div className="flex justify-between basis-1/2">
                 <div className="flex gap-4 items-center">
-                    <StarOutlined className="cursor-pointer" style={{ fontSize: '24px' }}/>
+                    <StarOutlined className="cursor-pointer text-[24px]"/>
                     <DatePicker />
                 </div>
                 <div className="flex gap-4 items-center">
-                    <MinusOutlined className="cursor-pointer" style={{ fontSize: '20px' }}/>
-                    <div>100%</div>
-                    <PlusOutlined className="cursor-pointer" style={{ fontSize: '20px' }}/>
+                    <MinusOutlined onClick={onClickZoomOutChart} className="cursor-pointer text-[20px]"/>
+                    <div>{zoomChartNumber}%</div>
+                    <PlusOutlined onClick={onClickZoomInChart} className="cursor-pointer text-[20px]"/>
                 </div>
                 <div className="flex gap-4 items-center">
-                    <StarOutlined className="cursor-pointer" style={{ fontSize: '24px' }}/>
+                    <StarOutlined className="cursor-pointer text-[24px]"/>
                     <DiffOutlined
-                        className="cursor-pointer"
-                        style={{ fontSize: '24px' }}
+                        className="cursor-pointer text-[24px]"
                         onClick={() => setIsOpenAddModal(true)}
                     />
-                    <DownloadOutlined className="cursor-pointer" style={{ fontSize: '24px' }}/>
+                    <DownloadOutlined onClick={() => chart.exportImg()} className="cursor-pointer text-[24px]"/>
                 </div>
             </div>
         </div>

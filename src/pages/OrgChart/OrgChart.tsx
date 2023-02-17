@@ -1,8 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { OrgChart } from "d3-org-chart";
-import { DataChart } from "../../types/Chart.type";
-import ReactDOMServer from "react-dom/server";
-import ContentOrgChart from "./OrgChartNodeContent";
+import "./OrgChart.css";
 import OrgChartNodeDetail from "./OrgChartNodeDetail";
 import { useDataOrgChart } from "../../stores/orgChart.store";
 import "react-tooltip/dist/react-tooltip.css";
@@ -14,10 +11,8 @@ import OrgChartUpdateNodeModal from "./OrgChartUpdateNodeModal";
 import OrgChartTool from "./OrgChartTool";
 import * as d3 from "d3";
 
-let chart: OrgChart<DataChart> = new OrgChart();
-
 export default function OrgChartComponent() {
-  const { data, setDataNode } = useDataOrgChart((state) => state);
+  const { chart, data, setDataNode } = useDataOrgChart((state) => state);
   const [isOpenPopover, setIsOpenPopover] = useState(false);
   const [idNode, setIdNode] = useState("");
   const [position, setPosition] = useState({
@@ -56,9 +51,12 @@ export default function OrgChartComponent() {
         }</span> <span style="margin-left:2px;">${children}</span></div>`;
       })
       .nodeContent((d, i, arr, state) => {
-        return ReactDOMServer.renderToStaticMarkup(
-          <ContentOrgChart data={d.data} />
-        );
+          let htmlString = `<div style="display: flex;height: 120px;justify-content: space-around;flex-direction: column;text-align: center;border:1px solid #E4E2E9;border-left: 5px solid #25A6F0"><div style="margin-top: 10px;text-transform: uppercase;font-size: 16px">${d.data.name}</div>`
+          if (d.data.fte && d.data.ftePosition) {
+              htmlString += `<div style="display: flex;justify-content: space-around; align-items: center;margin-bottom: 10px"><div>${d.data.fte}</div><div>${d.data.ftePosition}</div></div>`
+          }
+          htmlString += `</div>`;
+          return htmlString
       })
       .render();
     if (chartSVG) {

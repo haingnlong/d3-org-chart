@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { DefaultData } from "../services/Chart.service";
 import { DataChart } from "../types/Chart.type";
+import {OrgChart} from "d3-org-chart";
 
 type DataState = {
+  chart: OrgChart<DataChart>
   data: DataChart[];
   addData: (node: DataChart) => void;
   dataNode: DataChart;
@@ -18,6 +20,7 @@ type DataState = {
 };
 
 export const useDataOrgChart = create<DataState>((set) => ({
+  chart: new OrgChart(),
   data: DefaultData,
   addData: (node) =>
     set((state) => {
