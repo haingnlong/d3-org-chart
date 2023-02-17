@@ -13,7 +13,7 @@ const OrgChartAddNodeModal = () => {
 
   return (
     <Modal
-      title={"Tạo tổ chức"}
+      title={"Thêm Node"}
       open={isOpenAddNodeModal}
       onCancel={() => setIsOpenAddNodeModal(false)}
       footer={null}

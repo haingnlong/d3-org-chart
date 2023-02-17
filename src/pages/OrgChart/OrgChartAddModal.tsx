@@ -20,7 +20,7 @@ const OrgChartAddModal = () => {
 
   return (
     <Modal
-      title={"Thêm node"}
+      title={"Tạo tổ chức"}
       open={isOpenAddModal}
       onCancel={() => setIsOpenAddModal(false)}
       footer={null}

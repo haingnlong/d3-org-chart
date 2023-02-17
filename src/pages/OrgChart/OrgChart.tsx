@@ -9,6 +9,7 @@ import OrgChartAddModal from "./OrgChartAddModal";
 import OrgChartAddNodeModal from "./OrgChartAddNodeModal";
 import OrgChartUpdateNodeModal from "./OrgChartUpdateNodeModal";
 import OrgChartTool from "./OrgChartTool";
+import { Empty } from 'antd';
 import * as d3 from "d3";
 
 export default function OrgChartComponent() {
@@ -23,7 +24,7 @@ export default function OrgChartComponent() {
   const d3Container = useRef(null);
 
   useLayoutEffect(() => {
-    if (!(data && d3Container.current)) return;
+    if (!(data.length > 0 && d3Container.current)) return;
     const chartSVG = document.querySelector(".chart");
     const root = document.querySelector("#root");
     chart
@@ -98,23 +99,30 @@ export default function OrgChartComponent() {
       <OrgChartAddNodeModal />
       <OrgChartUpdateNodeModal />
       <OrgChartTool></OrgChartTool>
-      <div id="react-tooltip-chart">
-        <div ref={d3Container} />
-      </div>
-      <Tooltip
-        classNameArrow="popover-arrow"
-        anchorId="react-tooltip-chart"
-        position={position}
-        isOpen={isOpenPopover}
-        children={
-          <OrgChartNodeDetail
-            id={idNode}
-            onClosePopover={onClosePopover}
-          ></OrgChartNodeDetail>
-        }
-        offset={0}
-        clickable
-      />
+        {data.length > 0 && (
+           <>
+               <div id="react-tooltip-chart">
+                   <div ref={d3Container} />
+               </div>
+               <Tooltip
+                   classNameArrow="popover-arrow"
+                   anchorId="react-tooltip-chart"
+                   position={position}
+                   isOpen={isOpenPopover}
+                   children={
+                       <OrgChartNodeDetail
+                           id={idNode}
+                           onClosePopover={onClosePopover}
+                       ></OrgChartNodeDetail>
+                   }
+                   offset={0}
+                   clickable
+               />
+           </>
+        )}
+        {data.length === 0 && (
+            <Empty className="mt-8" description="Không có tổ chức nào" />
+        )}
     </div>
   );
 }
