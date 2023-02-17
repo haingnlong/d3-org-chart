@@ -33,10 +33,6 @@
     overflow-y: scroll;
 }
 
-.orgChart .react-tooltip-arrow {
-    display: none;
-}
-
 .orgChart .panel {
     text-align: start;
 }

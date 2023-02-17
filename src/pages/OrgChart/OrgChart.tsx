@@ -29,7 +29,8 @@ export default function OrgChartComponent() {
 
   useLayoutEffect(() => {
     if (!(data && d3Container.current)) return;
-    const chartContainer = document.querySelector(".chart");
+    const chartSVG = document.querySelector(".chart");
+    const chartContainer = document.querySelector(".svg-chart-container");
     chart
       .container(d3Container.current)
       .data(data)
@@ -38,8 +39,8 @@ export default function OrgChartComponent() {
       .onNodeClick((d) => {
         setIdNode(`${d}`);
         setPosition({
-          x: d3.pointer(event, chartContainer)[0] - d3.pointer(event)[0] + 100,
-          y: d3.pointer(event, chartContainer)[1] - d3.pointer(event)[1] + 60
+          x: d3.pointer(event, chartContainer)[0] - d3.pointer(event)[0],
+          y: d3.pointer(event, chartContainer)[1] - d3.pointer(event)[1]
         })
       })
       .childrenMargin((d) => 40)
@@ -60,9 +61,9 @@ export default function OrgChartComponent() {
         );
       })
       .render();
-    if (chartContainer) {
-      if (!chartContainer.hasAttribute("transform")) {
-        chartContainer.setAttribute("transform", "")
+    if (chartSVG) {
+      if (!chartSVG.hasAttribute("transform")) {
+          chartSVG.setAttribute("transform", "")
       }
       const debounceClosePopup = debounce(() => {
         setIsOpenPopover(false);
@@ -70,13 +71,13 @@ export default function OrgChartComponent() {
       const observer = new MutationObserver(function() {
         debounceClosePopup()
       });
-      observer.observe(chartContainer, {
+      observer.observe(chartSVG, {
         attributes: true,
         attributeFilter: ['transform']
       });
       return () => observer.disconnect();
     }
-  }, [data, d3Container.current]);
+  }, [data]);
 
   useEffect(() => {
     if (idNode !== "") {
@@ -101,6 +102,7 @@ export default function OrgChartComponent() {
         <div ref={d3Container} />
       </div>
       <Tooltip
+        classNameArrow="popover-arrow"
         anchorId="react-tooltip-chart"
         position={position}
         isOpen={isOpenPopover}
@@ -110,6 +112,7 @@ export default function OrgChartComponent() {
             onClosePopover={onClosePopover}
           ></OrgChartNodeDetail>
         }
+        noArrow
         clickable
       />
     </div>
