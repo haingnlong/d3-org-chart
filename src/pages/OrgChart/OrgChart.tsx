@@ -8,10 +8,10 @@ import { useDataOrgChart } from "../../stores/orgChart.store";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { debounce } from "lodash";
-import OrgChartTool from "./OrgChartTool";
 import OrgChartAddModal from "./OrgChartAddModal";
 import OrgChartAddNodeModal from "./OrgChartAddNodeModal";
 import OrgChartUpdateNodeModal from "./OrgChartUpdateNodeModal";
+import OrgChartTool from "./OrgChartTool";
 import * as d3 from "d3";
 
 let chart: OrgChart<DataChart> = new OrgChart();
@@ -30,7 +30,7 @@ export default function OrgChartComponent() {
   useLayoutEffect(() => {
     if (!(data && d3Container.current)) return;
     const chartSVG = document.querySelector(".chart");
-    const chartContainer = document.querySelector(".svg-chart-container");
+    const root = document.querySelector("#root");
     chart
       .container(d3Container.current)
       .data(data)
@@ -39,8 +39,8 @@ export default function OrgChartComponent() {
       .onNodeClick((d) => {
         setIdNode(`${d}`);
         setPosition({
-          x: d3.pointer(event, chartContainer)[0] - d3.pointer(event)[0],
-          y: d3.pointer(event, chartContainer)[1] - d3.pointer(event)[1]
+          x: d3.pointer(event, root)[0] - d3.pointer(event)[0] + 100,
+          y: d3.pointer(event, root)[1] - d3.pointer(event)[1] + 60
         })
       })
       .childrenMargin((d) => 40)
@@ -98,7 +98,7 @@ export default function OrgChartComponent() {
       <OrgChartAddNodeModal />
       <OrgChartUpdateNodeModal />
       <OrgChartTool></OrgChartTool>
-      <div id="react-tooltip-chart">
+      <div id="react-tooltip-chart" onMouseMove={(e) => console.log('e', e.clientX, e.clientY)}>
         <div ref={d3Container} />
       </div>
       <Tooltip
@@ -112,7 +112,7 @@ export default function OrgChartComponent() {
             onClosePopover={onClosePopover}
           ></OrgChartNodeDetail>
         }
-        noArrow
+        offset={0}
         clickable
       />
     </div>

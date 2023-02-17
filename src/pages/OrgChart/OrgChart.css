@@ -30,7 +30,7 @@
     opacity: 1;
     max-height: 540px;
     width: 360px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .orgChart .panel {

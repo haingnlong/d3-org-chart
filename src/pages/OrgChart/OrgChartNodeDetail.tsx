@@ -58,21 +58,21 @@ const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
         </Panel>
         <Panel className="bg-white panel" header="Chi tiết về phân cấp" key="3">
           <div>17 cac thuc the truc tiep ben duoi</div>
-          <div>17 cac the loai ban</div>
-          <div className="pl-4">221 nhan vien voi 221 FTE</div>
-          <div className="pl-4">486 Cac vi tri voi 220/2.276 FTE</div>
-          <div className="pl-4">
-            448 Cac vi tri co trang thai duoc tuyen dung
-          </div>
-          <Divider />
-          <div>80 cac thuc the trong tong 4 cap do ben duoi</div>
-          <div>39 cac thuc the loai phong</div>
-          <div className="pl-4">209 nhan vien voi 221 FTE</div>
-          <div className="pl-4">440 Cac vi tri voi 220/2.276 FTE</div>
-          <div className="pl-4">
-            404 Cac vi tri co trang thai duoc tuyen dung
-          </div>
-          <div>17 cac thuc the loai nhom/phong1</div>
+          {/*<div>17 cac the loai ban</div>*/}
+          {/*<div className="pl-4">221 nhan vien voi 221 FTE</div>*/}
+          {/*<div className="pl-4">486 Cac vi tri voi 220/2.276 FTE</div>*/}
+          {/*<div className="pl-4">*/}
+          {/*  448 Cac vi tri co trang thai duoc tuyen dung*/}
+          {/*</div>*/}
+          {/*<Divider />*/}
+          {/*<div>80 cac thuc the trong tong 4 cap do ben duoi</div>*/}
+          {/*<div>39 cac thuc the loai phong</div>*/}
+          {/*<div className="pl-4">209 nhan vien voi 221 FTE</div>*/}
+          {/*<div className="pl-4">440 Cac vi tri voi 220/2.276 FTE</div>*/}
+          {/*<div className="pl-4">*/}
+          {/*  404 Cac vi tri co trang thai duoc tuyen dung*/}
+          {/*</div>*/}
+          {/*<div>17 cac thuc the loai nhom/phong1</div>*/}
         </Panel>
       </Collapse>
     </div>
