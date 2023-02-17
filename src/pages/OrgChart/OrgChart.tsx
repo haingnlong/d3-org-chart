@@ -10,6 +10,7 @@ import OrgChartAddNodeModal from "./OrgChartAddNodeModal";
 import OrgChartUpdateNodeModal from "./OrgChartUpdateNodeModal";
 import OrgChartTool from "./OrgChartTool";
 import { Empty } from 'antd';
+import { NODE_WIDTH, NODE_HEIGHT } from "./orgChartConstant";
 import * as d3 from "d3";
 
 export default function OrgChartComponent() {
@@ -30,19 +31,19 @@ export default function OrgChartComponent() {
     chart
       .container(d3Container.current)
       .data(data)
-      .nodeWidth(() => 200)
-      .nodeHeight(() => 120)
+      .nodeWidth(() => NODE_WIDTH)
+      .nodeHeight(() => NODE_HEIGHT)
       .onNodeClick((d) => {
         setIdNode(`${d}`);
         setPosition({
-          x: d3.pointer(event, root)[0] - d3.pointer(event)[0] + 100,
-          y: d3.pointer(event, root)[1] - d3.pointer(event)[1] + 60
+          x: d3.pointer(event, root)[0] - d3.pointer(event)[0] + NODE_WIDTH/2,
+          y: d3.pointer(event, root)[1] - d3.pointer(event)[1] + NODE_HEIGHT/2
         })
       })
-      .childrenMargin((d) => 40)
-      .compactMarginBetween((d) => 15)
-      .compactMarginPair((d) => 80)
-      .buttonContent(({ node, state }) => {
+      .childrenMargin(() => 40)
+      .compactMarginBetween(() => 15)
+      .compactMarginPair(() => 80)
+      .buttonContent(({ node}) => {
         const children =
           "_directSubordinates" in node.data && node.data._directSubordinates;
         return `<div style="border-radius:3px;padding:4px;font-size:10px;margin:auto auto;background-color:white;border:1px solid #e4e2e9;"> <span style="font-size:9px">${
@@ -61,9 +62,6 @@ export default function OrgChartComponent() {
       })
       .render();
     if (chartSVG) {
-      if (!chartSVG.hasAttribute("transform")) {
-          chartSVG.setAttribute("transform", "")
-      }
       const debounceClosePopup = debounce(() => {
           setIsOpenPopover(false);
           setIdNode("");
