@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { DefaultData } from "../services/Chart.service";
 import { DataChart } from "../types/Chart.type";
-import {OrgChart} from "d3-org-chart";
+import { OrgChart } from "d3-org-chart";
+import { getAllChildById } from "../helper/helper"
 
 type DataState = {
   chart: OrgChart<DataChart>
@@ -30,7 +31,7 @@ export const useDataOrgChart = create<DataState>((set) => ({
       }
       return { data: [...data] };
     }),
-  dataNode: {},
+  dataNode: { id: "", parentId: "" },
   setDataNode: (id) =>
     set((state) => {
       const data = state.data;
@@ -65,18 +66,11 @@ export const useDataOrgChart = create<DataState>((set) => ({
     }),
   removeData: (id) =>
     set((state) => {
-      const indexOfId = state.data.findIndex((node) => node.id === id) + 1;
-      const deleteNode = state.data.find((node) => node.id === id);
-      const stackID = [deleteNode?.id];
-      for (let i = indexOfId; i < state.data.length; i++) {
-        if (
-          state.data[i].parentId === id ||
-          stackID.includes(state.data[i].parentId)
-        ) {
-          stackID.push(state.data[i].id);
-        }
-      }
-      const newData = state.data.filter((node) => !stackID.includes(node.id));
+      const child = getAllChildById(state.data, [id]);
+      const nodes = [id, ...child]
+      const newData = state.data.filter((item) => {
+          return !nodes.includes(item.id)
+      })
       return { data: newData };
     }),
 }));

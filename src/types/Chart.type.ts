@@ -1,5 +1,5 @@
 export type DataChart = {
-  id?: string;
+  id: string;
   parentId?: string;
   name?: string;
   fte?: number;
