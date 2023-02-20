@@ -1,6 +1,6 @@
-import { Button, Form, Input, InputNumber, Modal } from "antd";
-import { useDataOrgChart } from "../../stores/orgChart.store";
-import { DataChart } from "../../types/Chart.type";
+import { Button, Form, Input, InputNumber, Modal } from 'antd';
+import { useDataOrgChart } from '../../stores/orgChart.store';
+import { DataChart } from '../../types/Chart.type';
 
 const OrgChartAddNodeModal = () => {
   const { addData, isOpenAddNodeModal, setIsOpenAddNodeModal, dataNode } =
@@ -13,7 +13,7 @@ const OrgChartAddNodeModal = () => {
 
   return (
     <Modal
-      title={"Thêm Node"}
+      title={'Thêm Node'}
       open={isOpenAddNodeModal}
       onCancel={() => setIsOpenAddNodeModal(false)}
       footer={null}

@@ -1,6 +1,11 @@
-import { Collapse, Divider } from "antd";
-import { CloseOutlined, EditOutlined, DeleteOutlined, MenuOutlined } from "@ant-design/icons";
-import { useDataOrgChart } from "../../stores/orgChart.store";
+import { Collapse, Divider } from 'antd';
+import {
+  CloseOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  MenuOutlined,
+} from '@ant-design/icons';
+import { useDataOrgChart } from '../../stores/orgChart.store';
 
 const { Panel } = Collapse;
 
@@ -10,7 +15,8 @@ type PropsContent = {
 };
 
 const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
-  const { setIsOpenAddNodeModal, setIsOpenUpdateModal, dataNode, removeData } = useDataOrgChart((state) => state);
+  const { setIsOpenAddNodeModal, setIsOpenUpdateModal, dataNode, removeData } =
+    useDataOrgChart((state) => state);
 
   const removeNode = () => {
     removeData(id);
@@ -26,10 +32,12 @@ const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
         </div>
         <div className="flex">
           <div className="flex gap-2">
-            <MenuOutlined onClick={() => setIsOpenAddNodeModal(true)}></MenuOutlined>
-            <EditOutlined onClick={() => setIsOpenUpdateModal(true)}/>
-            <DeleteOutlined onClick={removeNode}/>
-            <CloseOutlined onClick={onClosePopover}/>
+            <MenuOutlined
+              onClick={() => setIsOpenAddNodeModal(true)}
+            ></MenuOutlined>
+            <EditOutlined onClick={() => setIsOpenUpdateModal(true)} />
+            <DeleteOutlined onClick={removeNode} />
+            <CloseOutlined onClick={onClosePopover} />
           </div>
         </div>
       </div>
@@ -37,11 +45,11 @@ const OrgChartNodeDetail = ({ id, onClosePopover }: PropsContent) => {
       <Collapse
         bordered={false}
         size="small"
-        defaultActiveKey={["1", "2", "3"]}
+        defaultActiveKey={['1', '2', '3']}
       >
         <Panel
           className="flex flex-col bg-white panel"
-          header={"Chi tiết"}
+          header={'Chi tiết'}
           key="1"
         >
           <div className="flex">

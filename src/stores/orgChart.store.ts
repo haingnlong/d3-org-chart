@@ -1,11 +1,11 @@
-import { create } from "zustand";
-import { DefaultData } from "../services/Chart.service";
-import { DataChart } from "../types/Chart.type";
-import { OrgChart } from "d3-org-chart";
-import { getAllChildById } from "../helper/helper"
+import { create } from 'zustand';
+import { DefaultData } from '../services/Chart.service';
+import { DataChart } from '../types/Chart.type';
+import { OrgChart } from 'd3-org-chart';
+import { getAllChildById } from '../helper/helper';
 
 type DataState = {
-  chart: OrgChart<DataChart>
+  chart: OrgChart<DataChart>;
   data: DataChart[];
   addData: (node: DataChart) => void;
   dataNode: DataChart;
@@ -31,7 +31,7 @@ export const useDataOrgChart = create<DataState>((set) => ({
       }
       return { data: [...data] };
     }),
-  dataNode: { id: "", parentId: "" },
+  dataNode: { id: '', parentId: '' },
   setDataNode: (id) =>
     set((state) => {
       const data = state.data;
@@ -67,10 +67,10 @@ export const useDataOrgChart = create<DataState>((set) => ({
   removeData: (id) =>
     set((state) => {
       const child = getAllChildById(state.data, [id]);
-      const nodes = [id, ...child]
+      const nodes = [id, ...child];
       const newData = state.data.filter((item) => {
-          return !nodes.includes(item.id)
-      })
+        return !nodes.includes(item.id);
+      });
       return { data: newData };
     }),
 }));

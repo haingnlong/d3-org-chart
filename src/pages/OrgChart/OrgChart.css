@@ -1,26 +1,26 @@
 .orgChart {
-    padding: 20px;
+  padding: 20px;
 }
 
 .orgChart .react-tooltip {
-    padding: 0;
-    background-color: #fff;
-    color: #000;
-    border: 1px solid #d9d9d9;
-    opacity: 1;
-    max-height: 540px;
-    width: 360px;
-    overflow-y: auto;
+  padding: 0;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #d9d9d9;
+  opacity: 1;
+  max-height: 540px;
+  width: 360px;
+  overflow-y: auto;
 }
 
 .orgChart .panel {
-    text-align: start;
+  text-align: start;
 }
 
 .orgChart .ant-collapse-header {
-    background-color: #d9d9d9;
+  background-color: #d9d9d9;
 }
 
 .orgChart .ant-collapse-content-box {
-    padding: 12px !important;
+  padding: 12px !important;
 }
